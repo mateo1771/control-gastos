@@ -11,25 +11,22 @@ export const AuthContextProvider = ({ children }) => {
           setUser(null);
         } else {
           setUser(session?.user.user_metadata);
-          // insertarUsuarios(session?.user_metadata, session.user.id)
-          console.log("event", event);
-          console.log("session", session?.user);
+          await InsertarUsuarios(session?.user.user_metadata, session?.user.id);
         }
       }
     );
+
+    const InsertarUsuarios = async (dataProvider, idSupabase) => {
+      const p = {
+        Nombre: dataProvider.name,
+        Foto: dataProvider.picture,
+        idAuth_Supabase: idSupabase,
+      };
+      await insertarUsuarios(p);
+    };
     return () => authListener.subscription;
   }, []);
 
-  // const insertarUsuarios = async (dataProvider, IdAuth_Supabase) => {
-  //   const p = {
-  //     nombres: dataProvider.name,
-  //     foto: dataProvider.picture,
-  //     IdAuth_Supabase: IdAuth_Supabase,
-  //   };
-  //   await insertarUsuarios(p){
-
-  //   }
-  // };
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
